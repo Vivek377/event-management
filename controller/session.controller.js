@@ -49,4 +49,34 @@ const addSpeakertoSession = async (req, res) => {
   }
 };
 
-module.exports = { createSession, getSessions, addSpeakertoSession };
+
+const registerParticipant = async (req, res) => {
+    try {
+      const { name, email } = req.body;
+      const { id } = req.params;
+  
+      const session = await SessionModel.findById(id);
+  
+      if (!session) {
+        return res.status(404).send({ err: "Session Not Found" });
+      }
+  
+      if (session.participants.length >= 10) {
+        return res.status(400).send({ err: "Session seats full" });
+      }
+  
+      const participant = new ParticipantModel({ name, email });
+      await participant.save();
+  
+      session.participants.push(participant._id);
+      await session.save();
+  
+      res.status(200).send({ msg: "Participant registered successfully" });
+    } catch (e) {
+      console.log(e);
+      res.status(400).send({ err: e.message });
+    }
+  };
+  
+
+module.exports = { createSession, getSessions, addSpeakertoSession, registerParticipant };

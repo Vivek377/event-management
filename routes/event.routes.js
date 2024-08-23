@@ -12,7 +12,6 @@ const {
 const eventRoute = express.Router();
 
 eventRoute.post("/create", createEvent);
-eventRoute.post("/add_participant/:id", registerParticipant);
 eventRoute.post("/add_session/:id", addSessiontoEvent)
 eventRoute.patch("/update/:id", updateEvent);
 eventRoute.delete("/delete/:id", deleteEvent);
